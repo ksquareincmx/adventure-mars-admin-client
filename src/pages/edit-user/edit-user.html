@@ -1,0 +1,66 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-buttons start>
+      <button ion-button (click)="dismiss(null)">
+        Cancel
+      </button>
+    </ion-buttons>
+    <ion-title>{{ isNew ? 'New User' : 'Edit User' }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label fixed>Name</ion-label>
+      <ion-input [(ngModel)]="user.name" type="text" name="name" required minlength="3" #name="ngModel"></ion-input>
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="name.invalid">Please enter a name of at least 3 characters</p>
+    </div>
+
+    <ion-item>
+      <ion-label fixed>Email</ion-label>
+      <ion-input [(ngModel)]="user.email" type="email" [disabled]="!isNew && user.role!='leader'" name="email" required email minlength="3"
+        #email="ngModel"></ion-input>
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="email.invalid">Please enter a valid email address</p>
+    </div>
+
+    <ion-item [hidden]="!isNew">
+      <ion-label fixed>Password</ion-label>
+      <ion-input [(ngModel)]="user.password" type="password" name="password" required minlength="8" #password="ngModel"></ion-input>
+    </ion-item>
+    <div class="input-error-container" *ngIf="isNew">
+      <p class="input-error" *ngIf="password.invalid">Please enter a password of at least 8 characters</p>
+    </div>
+
+    <ion-item>
+      <ion-label>Unit</ion-label>
+      <ion-select [(ngModel)]="selectedUnitId" [disabled]="getActiveRole()!='admin'">
+        <ion-option value="none">No unit assigned</ion-option>
+        <ion-option *ngFor="let unit of units" [value]="unit.id">{{unit.name}}</ion-option>
+      </ion-select>
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="unitInvalid()">Please select a Unit</p>
+    </div>
+
+    <ion-item *ngIf=" user.role === 'scout' ">
+      <ion-label fixed>Team</ion-label>
+      <ion-input [(ngModel)]="user.team" type="text" name="team" required minlength="3" #name="ngModel"></ion-input>
+    </ion-item>
+    <div class="input-error-container" *ngIf=" user.role === 'scout' ">
+      <p class="input-error" *ngIf="name.invalid">Please enter a team of at least 3 characters</p>
+    </div>
+
+  </ion-list>
+
+  <div padding>
+    <button ion-button color="primary" block (click)="save()" [disabled]="name.invalid || email.invalid || unitInvalid() || (isNew && password.invalid)">Apply</button>
+  </div>
+
+</ion-content>

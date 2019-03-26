@@ -1,0 +1,38 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-buttons start>
+      <button ion-button (click)="dismiss(null)">
+        Cancel
+      </button>
+    </ion-buttons>
+    <ion-title>{{ isNew ? 'New Unit' : 'Edit Unit' }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label fixed>Name</ion-label>
+      <ion-input [(ngModel)]="unit.name" type="text" name="name" required minlength="3" #name="ngModel"></ion-input>
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="name.invalid">Please enter a name of at least 3 characters</p>
+    </div>
+
+    <ion-item>
+      <ion-label>Leader</ion-label>
+      <ion-select [(ngModel)]="selectedLeaderId">
+        <ion-option value="none">No leader assigned</ion-option>
+        <ion-option *ngFor="let leader of leaders" [value]="leader.id">{{leader.name}} ({{leader.email}})</ion-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+
+  <div padding>
+    <button ion-button color="primary" block (click)="save()" [disabled]="name.invalid">Apply</button>
+  </div>
+
+</ion-content>

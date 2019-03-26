@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Units</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="load(true, null)">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="add()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-card class="dev-table-container" *ngIf="!isLoading">
+    <ion-card-content>
+      <table class="dev-table">
+        <tr>
+          <th>Name</th>
+          <th>Leader</th>
+          <th>Members</th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let unit of units">
+          <td>{{ unit.name }}</td>
+          <td *ngIf="unit.leader != null">{{ unit.leader.name }} ({{ unit.leader.email }})</td>
+          <td *ngIf="unit.leader == null">No leader assigned</td>
+          <td>{{ unit.memberCount }}</td>
+          <td>
+            <button ion-button icon-only clear round color="secondary" (click)="edit(unit)">
+              <ion-icon name="create"></ion-icon>
+            </button>
+            <button ion-button icon-only clear round color="danger" (click)="delete(unit)">
+              <ion-icon name="trash"></ion-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+      <div *ngIf="units != null && !units.length" class="no-data">
+        <div class="no-data-content">
+          <h2>There are no Units</h2>
+          <p>Add a unit by clicking +</p>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
+
+  <!-- <div text-center *ngIf="isLoading" class="loadingSpinner">
+    <ion-spinner></ion-spinner>
+  </div> -->
+
+</ion-content>

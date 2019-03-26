@@ -1,0 +1,164 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Score Board</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="refresh()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6>
+        <ion-list>
+          <ion-card>
+            <ion-card-content>
+              <ion-item>
+                <ion-label>Active Quest</ion-label>
+                <ion-select [(ngModel)]="questId" (ngModelChange)="load(true, null)" placeholder="Please select a Quest">
+                  <ion-option *ngFor="let quest of quests" [value]="quest.id">{{quest.name}}</ion-option>
+                </ion-select>
+              </ion-item>
+            </ion-card-content>
+          </ion-card>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div *ngIf="this.questId == null" class="no-data">
+    <div class="no-data-content">
+      <h2>No Quest Selected</h2>
+    </div>
+  </div>
+
+  <div *ngIf="this.questId != null">
+
+    <h1>Teams</h1>
+
+    <ion-card class="dev-table-container scrollable-table" *ngIf="!isLoading">
+      <ion-card-content>
+        <table class="dev-table">
+          <tr>
+            <th>Team</th>
+            <th>Completed</th>
+            <th>Average Completion time (H:MM:SS)</th>
+          </tr>
+          <tr *ngFor="let team of questTeams">
+            <td>{{ team.name ? team.name : 'Unnamed team' }}</td>
+            <td>{{ team.completed ? 'Yes' : 'No' }}</td>
+            <td>{{ team.completed ? formatDuration(team.avgTime) : '-' }}</td>
+          </tr>
+        </table>
+        <div *ngIf="questTeams != null && !questTeams.length" class="no-data">
+          <div class="no-data-content">
+            <h2>There are no Active Teams on this Quest</h2>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <h1>Scouts</h1>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6>
+          <ion-list>
+            <ion-card>
+              <ion-card-content>
+                <ion-item>
+                  <ion-label>Filter by Team:</ion-label>
+                  <ion-select [(ngModel)]="filterTeam" (ngModelChange)="onFilterQuestRunChange()" placeholder="All">
+                    <ion-option [value]="''">All</ion-option>
+                    <ion-option *ngFor="let team of questTeams" [value]="team.name">{{team.name}}</ion-option>
+                  </ion-select>
+                </ion-item>
+                <ion-item>
+                  <ion-label>Only show scouts that are in this Quest</ion-label>
+                  <ion-checkbox color="primary" [(ngModel)]="hideScoutsNotInQuest"></ion-checkbox>
+                </ion-item>
+              </ion-card-content>
+            </ion-card>
+          </ion-list>
+        </ion-col>
+        <ion-col col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6>
+          <ion-list>
+            <ion-card>
+              <ion-card-content>
+                <ion-item>
+                  <p>Total scouts in quest:
+                    <b>{{scoutQuests.length}}</b>
+                  </p>
+                </ion-item>
+                <ion-item>
+                  <p>Scouts that completed the quest:
+                    <b>{{countCompleted()}}</b>
+                  </p>
+                </ion-item>
+              </ion-card-content>
+            </ion-card>
+          </ion-list>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-card class="dev-table-container scrollable-table" *ngIf="!isLoading">
+      <ion-card-content>
+        <table class="dev-table">
+          <tr>
+            <th>Scout</th>
+            <th>Team</th>
+            <th>Location</th>
+            <th>Found Caches</th>
+            <th>Start time</th>
+            <th>End time</th>
+            <th>Completion time (H:MM:SS)</th>
+          </tr>
+          <tr *ngFor="let run of filteredScoutQuests">
+            <td>{{ run.user.name }}</td>
+            <td>{{ run.user.team }}</td>
+            <td>{{ run.user.currentLocation && run.user.currentLocation.coordinates ? displayCoords(run.user.currentLocation.coordinates)
+              : '' }}</td>
+            <td>{{ ((run.foundItems.length > caches.length) ? caches.length : run.foundItems.length) + ' / ' + caches.length
+              }}
+            </td>
+            <td>{{ run.startTime ? (run.startTime | date: 'short') : '' }}</td>
+            <td>{{ run.completed ? (run.finishTime | date: 'short') : 'Not completed' }}</td>
+            <td>{{ run.completed ? getCompletionTime(run) : '-' }}</td>
+          </tr>
+          <ng-container *ngIf="!hideScoutsNotInQuest">
+            <tr *ngFor="let scout of filteredScoutsNotInQuest">
+              <td>{{ scout.name }}</td>
+              <td>{{ scout.team }}</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+              <td>-</td>
+            </tr>
+          </ng-container>
+        </table>
+        <div *ngIf="filteredScoutQuests != null && !filteredScoutQuests.length" class="no-data">
+          <div class="no-data-content">
+            <h2>There are no Active Scouts on this Quest</h2>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <h1>Scouts location</h1>
+
+    <ion-item>
+      <ion-label>Show Cache Locations</ion-label>
+      <ion-checkbox color="primary" checked="true" [(ngModel)]="showCaches" (ngModelChange)="renderCaches()"></ion-checkbox>
+    </ion-item>
+
+    <div style="height: 500px;" leaflet [leafletOptions]="mapOptions" [leafletLayersControl]="layersControl" (leafletMapReady)="onMapReady($event)">
+    </div>
+  </div>
+
+</ion-content>

@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Scouts</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="load(true, null)">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="add()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-card class="dev-table-container" *ngIf="!isLoading">
+    <ion-card-content>
+      <table class="dev-table">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Team</th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let scout of scouts">
+          <td>{{ scout.name }}</td>
+          <td>{{ scout.email }}</td>
+          <td>{{ scout.team }}</td>
+          <td>
+            <button ion-button icon-only clear round color="secondary" (click)="edit(scout)">
+              <ion-icon name="create"></ion-icon>
+            </button>
+            <!-- <button ion-button icon-only clear round color="danger" (click)="delete(scout)">
+              <ion-icon name="trash"></ion-icon>
+            </button> -->
+          </td>
+        </tr>
+      </table>
+      <div *ngIf="scouts != null && !scouts.length" class="no-data">
+        <div class="no-data-content">
+          <h2>There are no Scouts in this Unit</h2>
+          <p>Add a scout by clicking +</p>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
+
+</ion-content>

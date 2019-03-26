@@ -1,0 +1,125 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>
+      <span *ngIf="isStateLogin()">Login</span>
+      <span *ngIf="isStateRecover()">Recover</span>
+      <span *ngIf="isStateSignup()">Create Account</span>
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content class="login proto-page">
+
+  <ion-row class="row-branding">
+    <ion-col text-center>
+      <h1>Survivors of Mars Admin</h1>
+      <p ion-text color="danger" *ngIf="badLogin && (error === 403 || error === 401)">Invalid Email or Password</p>
+      <p ion-text color="danger" *ngIf="badLogin && error !== 403 && error !== 401">There was a problem communicating with the server</p>
+
+    </ion-col>
+  </ion-row>
+  <ion-row class="row-login">
+
+    <!-- Login -->
+    <ion-col *ngIf="isStateLogin()">
+      <form [formGroup]="form" #f="ngForm" (ngSubmit)="submit()">
+        <ion-list class="list-login">
+
+          <ion-item>
+            <ion-label floating>Email</ion-label>
+            <ion-input type="email" formControlName="email"></ion-input>
+          </ion-item>
+          <div class="input-error-container">
+            <p class="input-error" *ngIf="form.get('email').invalid && (form.get('email').dirty || form.get('email').touched)">Invalid Email</p>
+          </div>
+
+          <ion-item>
+            <ion-label floating>Password</ion-label>
+            <ion-input type="password" formControlName="password"></ion-input>
+          </ion-item>
+          <div class="input-error-container">
+            <p class="input-error" *ngIf="form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)">Invalid Password</p>
+          </div>
+
+        </ion-list>
+        <div padding>
+          <button ion-button block type="submit" [disabled]="!f.form.valid">Access</button>
+        </div>
+      </form>
+
+      <!-- <div padding text-center>
+        <p>No account?</p>
+        <button ion-button block outline type="button" (click)="goSignup()">Register</button>
+        <p>Forgot password?, <a href="#/" (click)="goRecover()">Recover</a></p>
+      </div> -->
+    </ion-col>
+
+    <!-- Recover -->
+    <ion-col *ngIf="isStateRecover()">
+      <form [formGroup]="formRecover" #f="ngForm" (ngSubmit)="recover()">
+        <ion-list>
+
+          <ion-item>
+            <ion-label floating>Email</ion-label>
+            <ion-input type="email" formControlName="email"></ion-input>
+          </ion-item>
+          <div class="input-error-container">
+            <p class="input-error" *ngIf="formRecover.get('email').invalid && (formRecover.get('email').dirty || formRecover.get('email').touched)">Bad Email</p>
+          </div>
+
+        </ion-list>
+        <div padding>
+          <button ion-button block type="submit" [disabled]="!f.form.valid">Send Recovery Email</button>
+        </div>
+      </form>
+
+      <div padding text-center>
+        <p>No account?,
+          <a href="#/" (click)="goSignup()">Register</a>
+        </p>
+        <p>
+          <a href="#/" (click)="goLogin()">Login</a>
+        </p>
+      </div>
+    </ion-col>
+
+    <!-- Signup -->
+    <ion-col *ngIf="isStateSignup()">
+      <form [formGroup]="form" #f="ngForm" (ngSubmit)="signup()">
+        <ion-list>
+
+          <ion-item>
+            <ion-label floating>Email</ion-label>
+            <ion-input type="email" formControlName="email"></ion-input>
+          </ion-item>
+          <div class="input-error-container">
+            <p class="input-error" *ngIf="form.get('email').invalid && (form.get('email').dirty || form.get('email').touched)">Bad Email</p>
+          </div>
+
+          <ion-item>
+            <ion-label floating>Password</ion-label>
+            <ion-input type="password" formControlName="password"></ion-input>
+          </ion-item>
+          <div class="input-error-container">
+            <p class="input-error" *ngIf="form.get('password').invalid && (form.get('password').dirty || form.get('password').touched)">Bad password</p>
+          </div>
+
+        </ion-list>
+        <div padding>
+          <button ion-button block type="submit" [disabled]="!f.form.valid">Register</button>
+        </div>
+      </form>
+
+      <div padding text-center>
+        <!-- <p>¿Ya tienes cuenta?</p>
+        <button ion-button block outline type="button" (click)="goLogin()">Acceder</button> -->
+        <p>
+          <a href="#/" (click)="goLogin()">Login</a>
+        </p>
+        <!-- <p>Forgot password?, <a href="#/" (click)="goRecover()">Recover</a></p> -->
+      </div>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

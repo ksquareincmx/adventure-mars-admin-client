@@ -1,0 +1,135 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>{{ questId == null ? 'New Quest' : quest.name }}</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="refresh()">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="add()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6>
+        <ion-list>
+          <ion-item>
+            <ion-label>Name</ion-label>
+            <ion-input type="text" [(ngModel)]="quest.name" (ngModelChange)="setDirty()" name="name" required minlength="3" #name="ngModel"></ion-input>
+          </ion-item>
+          <div class="input-error-container">
+            <p class="input-error" *ngIf="name.invalid">Please enter a name of at least 3 characters</p>
+          </div>
+
+          <ion-item>
+            <ion-label>Published</ion-label>
+            <ion-checkbox [(ngModel)]="quest.published" (ngModelChange)="setDirty()"></ion-checkbox>
+          </ion-item>
+          <ion-item>
+            <ion-label>Show distance to object in the compass view</ion-label>
+            <ion-checkbox [(ngModel)]="quest.showDistance" (ngModelChange)="setDirty()"></ion-checkbox>
+          </ion-item>
+          <ion-item>
+            <button ion-button icon-start block color="danger" *ngIf="quest.id != null && !quest.paused" (click)="setPause(true)">
+              <ion-icon name="pause"></ion-icon>
+              Pause Quest
+            </button>
+            <button ion-button icon-start block color="secondary" *ngIf="quest.id != null && quest.paused" (click)="setPause(false)">
+              <ion-icon name="play"></ion-icon>
+              Resume Quest
+            </button>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col col-12 col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-6>
+        <ion-list>
+          <ion-item>
+            <ion-label>Start</ion-label>
+            <ion-datetime displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="quest.startTime" (ngModelChange)="setDirty()"></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-label>End</ion-label>
+            <ion-datetime displayFormat="MMM DD, YYYY HH:mm" [(ngModel)]="quest.endTime" (ngModelChange)="setDirty()"></ion-datetime>
+          </ion-item>
+          <ion-item>
+            <ion-label>Time Limit (Minutes)</ion-label>
+            <ion-input type="number" [(ngModel)]="quest.timeLimit" (ngModelChange)="setDirty()" name="timeLimit" required #timeLimit="ngModel"></ion-input>
+          </ion-item>
+          <div class="input-error-container">
+            <p class="input-error" *ngIf="timeLimit.invalid">Please enter a time limit</p>
+          </div>
+
+          <ion-item>
+            <button ion-button icon-start block color="primary" [disabled]="!quest.dirty || name.invalid || timeLimit.invalid" (click)="save()">
+              <ion-icon name="disc"></ion-icon>
+              Save
+            </button>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <h1>Cache Placement</h1>
+
+  <div class="map-ribbon">Drag and drop the caches in the map to change their coordinates</div>
+  <div style="height: 500px;" leaflet [leafletOptions]="mapOptions" [leafletLayersControl]="layersControl" (leafletMapReady)="onMapReady($event)">
+  </div>
+
+  <h1>Quest Caches</h1>
+
+  <ion-card class="dev-table-container" *ngIf="!isLoading">
+    <ion-card-content>
+      <table class="dev-table">
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Location</th>
+          <th>Preview</th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let cache of caches">
+          <td>{{ cache.name }}</td>
+          <td>{{ cache.description }}</td>
+          <td>{{ cache.location != null && cache.location.coordinates != null ? displayCoords(cache.location.coordinates) : ''
+            }}
+          </td>
+          <td *ngIf="cache.item == null || cache.item.preview == null">
+            <div class="item-preview-container">
+              Preview not available
+            </div>
+          </td>
+          <td *ngIf="cache.item != null && cache.item.preview != null">
+            <div class="item-preview-container">
+              <img [src]=" baseFileUrl + cache.item.preview " class="item-preview">
+            </div>
+          </td>
+          <td>
+            <button ion-button icon-only clear round color="secondary" (click)="edit(cache)">
+              <ion-icon name="create"></ion-icon>
+            </button>
+            <button ion-button icon-only clear round color="danger" (click)="delete(cache)">
+              <ion-icon name="trash"></ion-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+      <div *ngIf="caches != null && !caches.length" class="no-data">
+        <div class="no-data-content">
+          <h2>There are no Caches</h2>
+          <p>Add a cache by clicking +</p>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
+
+</ion-content>

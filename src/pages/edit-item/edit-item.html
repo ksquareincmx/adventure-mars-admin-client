@@ -1,0 +1,68 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-buttons start>
+      <button ion-button (click)="dismiss(null)">
+        Cancel
+      </button>
+    </ion-buttons>
+    <ion-title>{{ isNew ? 'New Item' : 'Edit Item' }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label fixed>Name</ion-label>
+      <ion-input [(ngModel)]="item.name" type="text" name="name" required minlength="3" #name="ngModel"></ion-input>
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="name.invalid">Please enter a name of at least 3 characters</p>
+    </div>
+
+    <ion-item>
+      <ion-label fixed>Description</ion-label>
+      <ion-input [(ngModel)]="item.description" type="text" name="description" required minlength="3" #description="ngModel"></ion-input>
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="description.invalid">Please enter a description of at least 3 characters</p>
+    </div>
+
+    <ion-item>
+      <ion-label fixed>3D Model File</ion-label>
+      <ion-input [(ngModel)]="model3dText" type="text" disabled></ion-input>
+      <label ion-button item-right outline class="model3d-file-input-btn" for="model3d-file-input">Select File</label>
+      <input item-right type="file" accept=".wt3" (change)="model3dSelect($event)" id="model3d-file-input">
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="model3dInvalid()">Please select a 3D model file (.wt3)</p>
+    </div>
+
+    <ion-item>
+      <ion-label fixed>Preview Image</ion-label>
+      <ion-input [(ngModel)]="previewText" type="text" disabled></ion-input>
+      <label ion-button item-right outline class="model3d-file-input-btn" for="model3d-file-input2">Select File</label>
+      <input item-right type="file" accept="image/*" (change)="previewSelect($event)" id="model3d-file-input2">
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="previewInvalid()">Please select a preview image file (PNG, JPG)</p>
+    </div>
+
+    <ion-item>
+      <ion-label>Visibility</ion-label>
+      <ion-select [(ngModel)]="item.type">
+        <ion-option value="private">Private</ion-option>
+        <ion-option value="public">Public</ion-option>
+      </ion-select>
+    </ion-item>
+
+  </ion-list>
+
+  <div padding>
+    <button ion-button color="primary" block (click)="save()" [disabled]="name.invalid || description.invalid || model3dInvalid() || previewInvalid()">
+      Apply
+    </button>
+  </div>
+
+</ion-content>

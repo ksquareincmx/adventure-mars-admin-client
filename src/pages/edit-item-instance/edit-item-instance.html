@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-buttons start>
+      <button ion-button (click)="dismiss(null)">
+        Cancel
+      </button>
+    </ion-buttons>
+    <ion-title>{{ isNew ? 'Add Cache' : 'Edit Cache' }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-item *ngFor="let item of items">
+    <ion-thumbnail item-start>
+      <img [src]=" baseFileUrl + item.preview " *ngIf="item.preview != null && item.preview.length">
+      <div class="no-preview" *ngIf="item.preview == null || !item.preview.length">Preview not available</div>
+    </ion-thumbnail>
+    <h2>{{item.name}}</h2>
+    <button ion-button clear item-end (click)="selectDismiss(item)">Select</button>
+  </ion-item>
+
+</ion-content>

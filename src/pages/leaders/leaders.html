@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Leaders</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="load(true, null)">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="add()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-card class="dev-table-container" *ngIf="!isLoading">
+    <ion-card-content>
+      <table class="dev-table">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Unit</th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let leader of leaders">
+          <td>{{ leader.name }}</td>
+          <td>{{ leader.email }}</td>
+          <td>{{ leader.unit == null ? 'No unit assigned' : leader.unit.name }}</td>
+          <td>
+            <button ion-button icon-only clear round color="secondary" (click)="edit(leader)">
+              <ion-icon name="create"></ion-icon>
+            </button>
+            <button ion-button icon-only clear round color="danger" (click)="delete(leader)">
+              <ion-icon name="trash"></ion-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+      <div *ngIf="leaders != null && !leaders.length" class="no-data">
+        <div class="no-data-content">
+          <h2>There are no Leaders</h2>
+          <p>Add a leader by clicking +</p>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
+
+</ion-content>

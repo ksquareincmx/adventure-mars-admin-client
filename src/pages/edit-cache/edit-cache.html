@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-buttons start>
+      <button ion-button (click)="dismiss(null)">
+        Cancel
+      </button>
+    </ion-buttons>
+    <ion-title>Edit Cache</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+
+    <ion-item>
+      <ion-label fixed>Name</ion-label>
+      <ion-input [(ngModel)]="cache.name" type="text" name="name" required minlength="3" #name="ngModel"></ion-input>
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="name.invalid">Please enter a name of at least 3 characters</p>
+    </div>
+
+    <ion-item>
+      <ion-label fixed>Description</ion-label>
+      <ion-input [(ngModel)]="cache.description" type="text" name="description" required minlength="3" #description="ngModel"></ion-input>
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="description.invalid">Please enter a description of at least 3 characters</p>
+    </div>
+
+    <ion-item>
+      <ion-label fixed>Latitude</ion-label>
+      <ion-input [(ngModel)]="latitude" type="number" name="latitude" required #name="ngModel"></ion-input>
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="latitude.invalid">Please enter a valid latitude</p>
+    </div>
+
+    <ion-item>
+      <ion-label fixed>Longitude</ion-label>
+      <ion-input [(ngModel)]="longitude" type="number" name="longitude" required #name="ngModel"></ion-input>
+    </ion-item>
+    <div class="input-error-container">
+      <p class="input-error" *ngIf="longitude.invalid">Please enter a valid longitude</p>
+    </div>
+
+  </ion-list>
+
+  <div padding>
+    <button ion-button color="primary" block (click)="save()" [disabled]="name.invalid || description.invalid || latitude.invalid || longitude.invalid">
+      Apply
+    </button>
+  </div>
+
+</ion-content>

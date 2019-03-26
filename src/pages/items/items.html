@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Items</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="load(true, null)">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="add()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-card class="dev-table-container" *ngIf="!isLoading">
+    <ion-card-content>
+      <table class="dev-table">
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Visibility</th>
+          <th>Preview</th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let item of items" class="item-row">
+          <td>{{ item.name }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.type | titlecase }}</td>
+          <td *ngIf="item.preview == null">
+            <div class="item-preview-container">
+              Preview not available
+            </div>
+          </td>
+          <td *ngIf="item.preview != null">
+            <div class="item-preview-container">
+              <img [src]=" baseFileUrl + item.preview " class="item-preview">
+            </div>
+          </td>
+          <td>
+            <button ion-button icon-only clear round color="secondary" (click)="edit(item)">
+              <ion-icon name="create"></ion-icon>
+            </button>
+            <button ion-button icon-only clear round color="danger" (click)="delete(item)">
+              <ion-icon name="trash"></ion-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+      <div *ngIf="items != null && !items.length" class="no-data">
+        <div class="no-data-content">
+          <h2>There are no Items</h2>
+          <p>Add a item by clicking +</p>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
+
+</ion-content>

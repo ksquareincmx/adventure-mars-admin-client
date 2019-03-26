@@ -1,0 +1,24 @@
+.login {
+  .scroll-content {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .branding {
+    max-width: 240px;
+    margin-bottom: 3px;
+  }
+  .row-branding {
+    flex: 1 !important;
+    justify-content: center !important;
+    align-items: center !important;
+    align-content: center !important;
+  }
+  .row-login {
+    flex: 5 !important;
+  }
+  .list-login {
+    margin-bottom: 0px;
+  }
+}
+
+

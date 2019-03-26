@@ -1,0 +1,56 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Quests</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="load(true, null)">
+        <ion-icon name="refresh"></ion-icon>
+      </button>
+      <button ion-button icon-only (click)="add()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-card class="dev-table-container" *ngIf="!isLoading">
+    <ion-card-content>
+      <table class="dev-table">
+        <tr>
+          <th>Name</th>
+          <th>Schedule</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+        <tr *ngFor="let quest of quests">
+          <td>{{ quest.name }}</td>
+          <td>From {{ quest.startTime | date: 'short' }} to {{ quest.endTime | date: 'short' }}</td>
+          <td>{{quest.published ? quest.paused ? 'Paused' : 'Published' : 'Draft'}}</td>
+          <td>
+            <button ion-button icon-only clear round color="secondary" (click)="edit(quest)">
+              <ion-icon name="create"></ion-icon>
+            </button>
+            <button ion-button icon-only clear round color="danger" (click)="delete(quest)">
+              <ion-icon name="trash"></ion-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+      <div *ngIf="quests != null && !quests.length" class="no-data">
+        <div class="no-data-content">
+          <h2>There are no Quests</h2>
+          <p>Add a quest by clicking +</p>
+        </div>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- <ion-infinite-scroll (ionInfinite)="doInfinite($event)">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll> -->
+
+</ion-content>
