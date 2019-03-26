@@ -3,11 +3,11 @@
 Table of contents
 
 1. [Pre requirements](#pre-requirements)
-2. [Configuration][#configutarion]
+2. [Configuration](#configutarion)
 3. [Running the project](#running-the-project)
 4. [Production build](#production-build)
 
-## Pre requirements
+## Pre requirements
 
 - nodejs >= 8.x
 - npm
@@ -28,7 +28,7 @@ You can install cordova running the following command:
 npm install -g cordova
 ```
 
-## Configuration
+## Configuration
 
 First you need to install all your dependencies. You can do that running this command:
 
@@ -44,7 +44,7 @@ To run the application on `dev` mode you must execute following command:
 ionic serve
 ```
 
-## Production build
+## Production build
 
 You can build for production running the following command:
 
